@@ -18,19 +18,32 @@ const app = express();
 
 const port = 3000;
 
-app.get("/signout", (req,res) => {
-    return res.send("you are signed Out");
+const admin = (req,res) => {
+    return res.send("admin dashboard");
+};
 
-});
+const isAdmin = (req, res, next) => {
+    console.log("isAdmin is running")
+    next();
+};
+
+const isLoggedIn = (req,res,next) => {
+    console.log("you are logged in")
+    next();
+};
+
+app.get("/admin", isLoggedIn, isAdmin ,admin);//callback = a function without any name
+
+
+
 app.get("/akash", (req,res) => {
     return res.send("Akash was here");
-
 });
 app.get("/", (req,res) => {
     return res.send("This is hitesh homepage");
 
 });
 
-app.listen(port, () => {
+app.listen(port, () => { 
     console.log("server is up and running.....");
 });
