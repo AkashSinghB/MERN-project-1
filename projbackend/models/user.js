@@ -1,16 +1,16 @@
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose';
 //or
-//const mongoose = require('mongoose');    this is common JS syntax
+var mongoose = require('mongoose');    //this is common JS syntax
 const crypto = require('crypto');
 
-// import { v4 as uuidv4 } from 'uuid';
+ //import { v1 as uuidv1 } from 'uuid';
 // uuidv4();
 
 const uuidv1 = require('uuid/v1');
 
 
 
-  //var Schema = mongoose.Schema;
+  //var Schema = new mongoose.Schema;
   //or
   const { Schema } = mongoose;
 
@@ -61,7 +61,7 @@ const uuidv1 = require('uuid/v1');
 
   userSchema.virtual("password")
         .set(function(password){
-            this._password = password
+            this._password = password;
             this.salt = uuidv1();
             this.encry_password = this.securePassword(password);
         })
@@ -71,14 +71,14 @@ const uuidv1 = require('uuid/v1');
         })
 
 
-  userSchema.method = {
+  userSchema.methods = {
 
       authenticate: function(plainPassword){
           return this.securePassword(plainPassword) === this.encry_password
         },
 
       securePassword: function(plainPassword){
-          if (!password) return "";
+          if (!plainPassword) return "";
           try {
               return crypto
               .createHmac('sha256', this.salt)
