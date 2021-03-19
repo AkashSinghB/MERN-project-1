@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+var mongoose = require('mongoose'); 
 
 const categorySchema = new mongoose.Schema({
     name: {

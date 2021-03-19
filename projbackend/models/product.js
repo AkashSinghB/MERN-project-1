@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+var mongoose = require('mongoose'); 
+
 const {ObjectId} = mongoose.Schema;
 
 

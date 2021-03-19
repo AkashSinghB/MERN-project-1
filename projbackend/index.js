@@ -6,8 +6,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 
+//My Routes
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const categoryRoutes = require("./routes/category");
 
-const authRoutes = require("./routes/auth.js");
+//test route
+//const testUserRoute = require("./routes/testalluser")
 
 
 //mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -29,8 +34,14 @@ app.use(express.json());
 app.use(cookieParser()); 
 app.use(cors());
 
-//MyRoutes
+//MyRoutes          ----middleware injected here
 app.use("/api", authRoutes);
+app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
+
+//test user route
+//app.use("/api", testUserRoute);
+
 
 
 //port
