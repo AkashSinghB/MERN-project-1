@@ -7,3 +7,9 @@
 body {
   background: #343a40;
 }
+
+footer {
+  position: unset;
+  bottom: 0;
+  width: 100%;
+}
