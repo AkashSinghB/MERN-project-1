@@ -15,18 +15,17 @@ const Signup = () => {
   const { name, email, password, error, success } = values;
 
   //(triple dot)...  load the existing all values
-  const handleChange = name => e => {
+  const handleChange = (name) => (e) => {
     setValues({ ...values, error: false, [name]: e.target.value });
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     setValues({ ...values, error: false });
     signup({ name, email, password })
-      .then(data => {
+      .then((data) => {
         if (data.error) {
           setValues({ ...values, error: data.error, success: false });
-          
         } else {
           setValues({
             ...values,
@@ -38,7 +37,9 @@ const Signup = () => {
           });
         }
       })
-      .catch(console.log("Error in signup"));
+      .catch((err) => {
+        console.log("Error in signup");
+      });
   };
 
   const signUpForm = () => {

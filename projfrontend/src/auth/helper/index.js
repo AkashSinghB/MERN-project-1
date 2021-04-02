@@ -14,14 +14,14 @@ export const signup = (user) => {
     .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 export const signin = (user) => {
   //fetch request
   return fetch(`${API}/signin`, {
     method: "POST",
-    header: {
+    headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },

@@ -31,10 +31,7 @@ exports.signin = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
-      errors: {
-        message: errors.array()[0].msg,
-        param: errors.array()[0].param,
-      },
+      error: errors.array()[0].msg,
     });
   }
 
