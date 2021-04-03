@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { isAuthenticated } from "../auth/helper";
 import Base from "../core/Base";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { createCategory } from "./helper/adminapicall";
 
 const AddCategory = () => {
@@ -37,16 +37,25 @@ const AddCategory = () => {
         setError(true);
       } else {
         setError("");
-        setSuccess(true);
+        setSuccess(false);
         setName("");
       }
     });
     // .catch(); we dont need catch
+
+    setTimeout(() => {
+      setSuccess(true);
+    }, 2000);
   };
 
   const successMessage = () => {
     if (success) {
-      return <h4 className="text-success">Category created successfully!</h4>;
+      return (
+        <h4 className="text-success">
+          Category created successfully!
+          <Redirect to="/admin/dashboard" />
+        </h4>
+      );
     }
   };
 
@@ -70,7 +79,7 @@ const AddCategory = () => {
             required
             placeholder="For Ex. Summer"
           />
-          <button className="btn  btn-outline-info" onClick={onSubmit}>
+          <button className="btn  btn-outline-info rounded" onClick={onSubmit}>
             Create Category
           </button>
         </div>

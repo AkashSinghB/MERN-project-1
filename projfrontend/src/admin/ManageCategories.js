@@ -9,7 +9,7 @@ import {
 } from "./helper/adminapicall";
 import Base from "../core/Base";
 
-const ManageCategories = ({ match }) => {
+const ManageCategories = () => {
   const [categories, setCategories] = useState([]);
 
   const [catName, setCatName] = useState({ name: "" });
@@ -43,16 +43,20 @@ const ManageCategories = ({ match }) => {
   };
 
   const onUpdate = (categoryId) => {
-    // e.preventDefault();
-
     updateCategory(categoryId, user._id, token, name).then((data) => {
       if (data.error) {
         console.log(data.error);
-        console.log(user._id);
       } else {
         setCatName({ name: "" });
+        setShow("");
+
+        preload();
       }
     });
+  };
+
+  const updateCancel = (e) => {
+    setShow("");
   };
 
   const [show, setShow] = useState(false);
@@ -66,7 +70,6 @@ const ManageCategories = ({ match }) => {
       } else {
         setCatName({ name: data.name });
       }
-      console.log(match);
     });
   };
 
@@ -82,7 +85,7 @@ const ManageCategories = ({ match }) => {
         </h2>
 
         {categories.map((category, index) => (
-          <div className="row text-center mb-2">
+          <div key={index} className="row text-center mb-2">
             <div className="col-4">
               <h3
                 className="text-white text-left"
@@ -115,6 +118,13 @@ const ManageCategories = ({ match }) => {
                 }}
               >
                 Update
+              </button>
+              <button
+                className="btn btn-danger rounded ml-2"
+                style={{ display: show === index ? "" : "none" }}
+                onClick={updateCancel}
+              >
+                Cancel
               </button>
             </div>
             <div className="col-4">

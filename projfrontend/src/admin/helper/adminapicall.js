@@ -57,14 +57,15 @@ export const deleteCategory = (categoryId, uId, token) => {
 };
 
 //update a category
-export const updateCategory = (categoryId, uId, token, cate) => {
+export const updateCategory = (categoryId, uId, token, category) => {
   return fetch(`${API}/category/${categoryId}/${uId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: cate,
+    body: JSON.stringify({ name: category }),
   })
     .then((response) => {
       return response.json();
