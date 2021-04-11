@@ -20,11 +20,10 @@ exports.getProductById = (req, res, next, id) => {
 };
 
 exports.createProducts = (req, res) => {
-
   // const errors = validationResult(req);
   // if(!errors.isEmpty()){
   //   return res.status(422).json({
-  //     errors: 
+  //     errors:
   //     {message:errors.array()[0].msg,
   //       param:errors.array()[0].param
   //     }
@@ -41,16 +40,15 @@ exports.createProducts = (req, res) => {
       });
     }
     //destructure the fields    ex- fields.price
-    const {name, description, price, category, stock} = fields;
+    const { name, description, price, category, stock } = fields;
 
     //TODO: restrictions on fields on route level
-    if(!name || !description || !price ||!category || !stock){
+    if (!name || !description || !price || !category || !stock) {
       return res.status(400).json({
-        error: "Please include all fields"
+        error: "Please include all fields",
       });
-    } 
+    }
 
-    
     let product = new Product(fields);
 
     //handle file here
@@ -64,7 +62,7 @@ exports.createProducts = (req, res) => {
       product.photo.contentType = file.photo.type;
     }
     //console.log(product)
-    
+
     //save to the DB
     product.save((err, product) => {
       if (err) {
@@ -77,17 +75,15 @@ exports.createProducts = (req, res) => {
   });
 };
 
-
-exports.getProduct = (req,res) => {
-  req.product.photo = undefined
-  return res.json(req.product)
-}
+exports.getProduct = (req, res) => {
+  req.product.photo = undefined;
+  return res.json(req.product);
+};
 
 //middleware
 exports.photo = (req, res, next) => {
-
   //safty net check (if there is some data then only we return some data)
-  if(req.product.photo.data){
+  if (req.product.photo.data) {
     res.set("Content-Type", req.product.photo.contentType);
     return res.send(req.product.photo.data);
   }
@@ -98,14 +94,14 @@ exports.photo = (req, res, next) => {
 exports.deleteProduct = (req, res) => {
   let product = req.product;
   product.remove((err, deletedProduct) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
-        error: "Failed to delete the product"
-      })
+        error: "Failed to delete the product",
+      });
     }
     res.json({
       message: "Deletion was a success",
-      deletedProduct
+      deletedProduct,
     });
   });
 };
@@ -121,10 +117,10 @@ exports.updateProduct = (req, res) => {
         error: "problem with image",
       });
     }
-   
+
     //updation code
     let product = req.product;
-    product = _.extend(product, fields)
+    product = _.extend(product, fields);
 
     //handle file here
     if (file.photo) {
@@ -137,7 +133,7 @@ exports.updateProduct = (req, res) => {
       product.photo.contentType = file.photo.type;
     }
     //console.log(product)
-    
+
     //save to the DB
     product.save((err, product) => {
       if (err) {
@@ -150,35 +146,33 @@ exports.updateProduct = (req, res) => {
   });
 };
 
-
 //product listing
 
 exports.getAllProducts = (req, res) => {
-  let limit = req.query.limit ? parseInt(req.query.limit) : 8
-  let sortBy = req.query.sortBy ? req.query.sortBy : "_id"
+  let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+  let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
 
   Product.find()
-  .select("-photo")   // "-" is for dont select photo
-  .populate("category")
-  .sort([[sortBy, "asc"]])
-  .limit(limit)
-  .exec((err, products) => {
-    if(err){
-      return res.status(400).json({
-        error: "No products right now"
-      })
-    }
-    res.json(products);
-  });
+    .select("-photo") // "-" is for dont select photo
+    .populate("category")
+    .sort([[sortBy, "asc"]])
+    .limit(limit)
+    .exec((err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: "No products right now",
+        });
+      }
+      res.json(products);
+    });
 };
-
 
 exports.getAllUniqueCategories = (req, res) => {
   Product.distinct("category", {}, (err, category) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
-        error: "No category found"
-      })
+        error: "No category found",
+      });
     }
     res.json(category);
   });
@@ -186,21 +180,23 @@ exports.getAllUniqueCategories = (req, res) => {
 
 //changing stocks on the basis of solds
 exports.updateStock = (req, res, next) => {
-
-  let myOperations = req.body.order.products.map(prod => {
+  let myOperations = req.body.order.products.map((prod) => {
+    // console.log(req.body.order.products);
     return {
       updateOne: {
-        filter: {_id: prod._id},
-        update: {$inc: {stock:-prod.count, sold: +prod.count}}
-      }
-    }
-  }); 
+        filter: { _id: prod._id },
+        // update: { $inc: { stock: -prod.count, sold: +prod.count } },
+        update: { $inc: { stock: -1, sold: +1 } },
+      },
+    };
+  });
 
-  Product.bulkWrite(myOperations, {}, (err,products) => {
-    if(err){
-      return res.status(400).json({
-        error: 'Bulk operations failed'
-      })
+  Product.bulkWrite(myOperations, {}, (err, products) => {
+    if (err) {
+      console.log(myOperations);
+      // return res.status(400).json({
+      //   error: "Bulk operations failed",
+      // });
     }
     next();
   });

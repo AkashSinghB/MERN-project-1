@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Base from "./Base";
 import { loadCart } from "./helper/cartHelper";
 import Card from "./Card";
-import StripeCheckout from "./StripeCheckout";
+import Paymentb from "./PaymentB";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +13,7 @@ const Cart = () => {
     setProducts(loadCart());
   }, [reload]); //if you want to reload or remount any component then pass it in these square brackets
 
-  const loadAllProducts = () => {
+  const loadAllProducts = (products) => {
     return (
       <div className=" col-sm-6">
         <h2>This section is to load products</h2>
@@ -41,9 +41,15 @@ const Cart = () => {
   return (
     <Base title="Cart Page" description="Ready to Checkout">
       <div className="row ">
-        <div className="col-6">{loadAllProducts()}</div>
+        <div className="col-6">
+          {products.length > 0 ? (
+            loadAllProducts(products)
+          ) : (
+            <h3>No products in cart</h3>
+          )}
+        </div>
         <div className="col-sm-6">
-          <StripeCheckout products={products} setReload={setReload} />
+          <Paymentb products={products} setReload={setReload} />
         </div>
       </div>
     </Base>
