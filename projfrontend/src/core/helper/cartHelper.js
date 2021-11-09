@@ -1,15 +1,15 @@
 export const addItemToCart = (item, next) => {
   let cart = [];
-  //   if (typeof window !== undefined) {
-  if (localStorage.getItem("cart")) {
-    cart = JSON.parse(localStorage.getItem("cart"));
+  if (typeof window !== undefined) {
+    if (localStorage.getItem("cart")) {
+      cart = JSON.parse(localStorage.getItem("cart"));
+    }
+    cart.push({
+      ...item,
+    });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    next();
   }
-  cart.push({
-    ...item,
-  });
-  localStorage.setItem("cart", JSON.stringify(cart));
-  next();
-  //   }
 };
 
 export const loadCart = () => {
@@ -40,6 +40,9 @@ export const removeItemFromCart = (productId) => {
 export const cartEmpty = (next) => {
   if (typeof window !== undefined) {
     localStorage.removeItem("cart");
+    let cart = [];
+    localStorage.setItem("cart", JSON.stringify(cart));
+
     next();
   }
 };

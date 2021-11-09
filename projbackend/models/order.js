@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
 
 const { ObjectId } = mongoose.Schema;
 
@@ -18,7 +19,7 @@ const ProductCart = mongoose.model("ProductCart", ProductCartSchema);
 const orderSchema = new mongoose.Schema(
   {
     products: [ProductCartSchema],
-    transation_Id: {},
+    transaction_id: {},
     amount: { type: Number },
     address: String,
     status: {
