@@ -1,1 +1,2 @@
-# MERNbootcamp
+# MERN project ecommerce
+
